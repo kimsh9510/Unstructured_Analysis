@@ -9,7 +9,9 @@ from xml.etree import ElementTree
 import xml.etree.ElementTree as ET
 import csv
 import datetime
-pageNos = [1, 2]
+import math
+#pageNos = [1, 2]
+pages = 1
 url = 'http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?serviceKey=vBWCvCxW515%2BgkLcMNXIXHBLHaNh9Xa8F8V9TrjFpKFeB0lP7D9%2BwXEIuAttbGQPrND%2BREAx2GIJf5eXoHF%2FdA%3D%3D&pageNo=1&numOfRows=10&type=xml'
 response = requests.get(url)
 contents = response.text
@@ -23,14 +25,16 @@ for node in xml:
     except Exception as e:
         continue
 
+pages = math.ceil(int(count)/1000)
+print(pages)
 #csv파일 열기
 csv_file = open("data.csv", 'w', encoding='utf-8-sig')
 csv_file_writer = csv.writer(csv_file)
 csv_file_writer.writerow(["create_date", "location_id", "location_name", "md101_sn", "msg", "send_platform"])
 
-for pageNo in pageNos:
+for pageNo in range(1, pages+1):
     # url 입력 - ServiceKey=인증키, pageNo=페이지 시작, numOfRows=출력 행 갯수, type=json or xml
-    url = 'http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?serviceKey=vBWCvCxW515%2BgkLcMNXIXHBLHaNh9Xa8F8V9TrjFpKFeB0lP7D9%2BwXEIuAttbGQPrND%2BREAx2GIJf5eXoHF%2FdA%3D%3D&pageNo='+str(pageNo)+'&numOfRows=10&type=xml'
+    url = 'http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?serviceKey=vBWCvCxW515%2BgkLcMNXIXHBLHaNh9Xa8F8V9TrjFpKFeB0lP7D9%2BwXEIuAttbGQPrND%2BREAx2GIJf5eXoHF%2FdA%3D%3D&pageNo='+str(pageNo)+'&numOfRows=1000&type=xml'
     # startCreateDt=20220101, endCreateDt=20210103
     #url = 'http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?serviceKey=vBWCvCxW515%2BgkLcMNXIXHBLHaNh9Xa8F8V9TrjFpKFeB0lP7D9%2BwXEIuAttbGQPrND%2BREAx2GIJf5eXoHF%2FdA%3D%3D'
     # url 불러오기
@@ -62,3 +66,4 @@ for pageNo in pageNos:
         #     csv_file_writer.writerow(csv_line)
         # if (create_date.text >= '2022-01-07 11:00:09 AM'):
         #     csv_file_writer.writerow(csv_line)
+
