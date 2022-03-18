@@ -11,8 +11,9 @@ import csv
 import datetime
 import math
 #pageNos = [1, 2]
-pages = 1
-url = 'http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?serviceKey=vBWCvCxW515%2BgkLcMNXIXHBLHaNh9Xa8F8V9TrjFpKFeB0lP7D9%2BwXEIuAttbGQPrND%2BREAx2GIJf5eXoHF%2FdA%3D%3D&pageNo=1&numOfRows=10&type=xml'
+#pages = 1
+
+url = 'http://apis.data.go.kr/1741000/DisasterMsg3/getDisasterMsg1List?serviceKey=vBWCvCxW515%2BgkLcMNXIXHBLHaNh9Xa8F8V9TrjFpKFeB0lP7D9%2BwXEIuAttbGQPrND%2BREAx2GIJf5eXoHF%2FdA%3D%3D&pageNo=1&numOfRows=1000&type=xml'
 response = requests.get(url)
 contents = response.text
 xml = ET.fromstring(contents)
@@ -20,7 +21,7 @@ xml = ET.fromstring(contents)
 #원하는 태그 값 받아오기
 for node in xml:
     try:
-        count = node.find("list_total_count").text
+        count = node.find("totalCount").text
         print(count)
     except Exception as e:
         continue
